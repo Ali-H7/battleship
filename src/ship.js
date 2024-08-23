@@ -4,4 +4,8 @@ export class Ship {
     this.health = shipLength;
     this.isSunk = false;
   }
+
+  hit() {
+    this.health--;
+  }
 }
