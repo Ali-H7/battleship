@@ -13,8 +13,16 @@ test('damage the the ship by 1', () => {
   expect(ship.health).toBe(4);
 });
 
-test('Check if ship sunk or not', () => {
+test('check if ship sunk or not', () => {
   const ship = new Ship(1);
   ship.hit();
   expect(ship.status).toBe('sunk');
+});
+
+test('create a gameboard object that contains a 10x10 board', () => {
+  const gameBoard = new Gameboard();
+  expect(gameBoard.board).toHaveLength(10);
+  gameBoard.board.forEach((row) => {
+    expect(row).toHaveLength(10);
+  });
 });
