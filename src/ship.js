@@ -1,8 +1,11 @@
 export class Ship {
-  constructor(shipLength) {
+  constructor(id, shipLength, alignmnet, position) {
+    this.id = id;
     this.length = shipLength;
     this.health = shipLength;
     this.status = 'floating';
+    this.alignmnet = alignmnet;
+    this.position = position;
   }
 
   hit() {
