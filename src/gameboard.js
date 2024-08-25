@@ -39,8 +39,9 @@ export class Gameboard {
     const position = [];
     let randomIndex1 = Math.floor(Math.random() * 10) + 1;
     let randomIndex2 = Math.floor(Math.random() * 10) + 1;
+    let count = 0;
 
-    for (let i = 0; i < length; i++) {
+    while (count < length) {
       const coords = [];
       if (alignmnet === 'vertical') {
         coords.push(randomIndex1 % 10);
@@ -55,13 +56,14 @@ export class Gameboard {
       const isPositionTaken = this.checkPosition(coords);
       const isOffTheBoard = this.checkLimit(position, coords);
       if (isPositionTaken || isOffTheBoard) {
-        i = 0;
+        count = 0;
         position.length = 0;
         randomIndex1 = Math.floor(Math.random() * 10) + 1;
         randomIndex2 = Math.floor(Math.random() * 10) + 1;
         continue;
       }
       position.push(coords);
+      count++;
     }
 
     position.forEach((coords) => {
@@ -93,5 +95,15 @@ export class Gameboard {
     const case2 =
       lastCoords[0] === newCoords[0] && lastCoords[1] + 1 !== newCoords[1];
     return case1 || case2;
+  }
+
+  placeShips() {
+    this.ships.forEach((ship) => {
+      ship.position.forEach((coords) => {
+        const x = coords[0];
+        const y = coords[1];
+        this.board[x][y] = ship.id;
+      });
+    });
   }
 }
