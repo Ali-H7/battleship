@@ -5,6 +5,7 @@ export class Gameboard {
     this.board = this.generateBoard();
     this.occupiedLocations = [];
     this.ships = this.createShips();
+    this.placeShips();
   }
 
   generateBoard() {
@@ -105,5 +106,25 @@ export class Gameboard {
         this.board[x][y] = ship.id;
       });
     });
+  }
+
+  receiveAttack(x, y) {
+    const attackedTile = this.board[x][y];
+    const ship = attackedTile - 1;
+
+    if (attackedTile >= 1) {
+      this.ships[ship].hit();
+      this.updateBoard(x, y, 'H');
+    } else {
+      this.updateBoard(x, y, 'M');
+    }
+  }
+
+  updateBoard(x, y, value) {
+    this.board[x][y] = value;
+  }
+
+  checkShipsStatus() {
+    this.ships.every((ship) => ship.status === 'sunk');
   }
 }

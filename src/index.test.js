@@ -37,8 +37,17 @@ test('receiveAttack should attack the ship correctly', () => {
   const mockBoard = [[0, 0, 0, 0, 1, 1, 1, 0, 0]];
   const mockFn = jest.fn().mockReturnValue(mockBoard);
   const gameBoard = new Gameboard();
+  const ship = gameBoard.ships[0];
+  const hitSpy = jest.spyOn(ship, 'hit');
+  const shipHealth = ship.health;
   gameBoard.board = mockFn();
   expect(gameBoard.board).toBe(mockBoard);
+  gameBoard.receiveAttack(0, 4);
   gameBoard.receiveAttack(0, 5);
-  expect(gameBoard.ships[0].hit()).toBeCalled();
+  gameBoard.receiveAttack(0, 3);
+  expect(gameBoard.board[0][4]).toBe('H');
+  expect(gameBoard.board[0][5]).toBe('H');
+  expect(gameBoard.board[0][3]).toBe('M');
+  expect(hitSpy).toHaveBeenCalled();
+  expect(ship.health).toBe(shipHealth - 2);
 });
