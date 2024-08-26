@@ -32,3 +32,13 @@ test('the gameboard object should create 10 ships', () => {
   const gameBoard = new Gameboard();
   expect(gameBoard.ships).toHaveLength(10);
 });
+
+test('receiveAttack should attack the ship correctly', () => {
+  const mockBoard = [[0, 0, 0, 0, 1, 1, 1, 0, 0]];
+  const mockFn = jest.fn().mockReturnValue(mockBoard);
+  const gameBoard = new Gameboard();
+  gameBoard.board = mockFn();
+  expect(gameBoard.board).toBe(mockBoard);
+  gameBoard.receiveAttack(0, 5);
+  expect(gameBoard.ships[0].hit()).toBeCalled();
+});
