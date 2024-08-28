@@ -1,8 +1,7 @@
-import { Gameboard } from './gameboard';
+import './style.css';
+import { Player } from './player';
+import { render } from './ui-controller';
 
-console.log('Hello World!!');
-const playerBoard = new Gameboard();
-playerBoard.receiveAttack(1, 2);
-playerBoard.receiveAttack(0, 2);
-playerBoard.receiveAttack(1, 0);
-console.log(playerBoard);
+const player1 = new Player('player');
+const player2 = new Player('computer');
+render(player1, player2);

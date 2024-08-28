@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  gap: 150px;
+  justify-content: center;
+}
+
+.player-board,
+.computer-board {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+  max-width: 570px;
+  max-height: 570px;
+}

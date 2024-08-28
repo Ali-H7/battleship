@@ -19,14 +19,16 @@ export class Gameboard {
 
   createShips() {
     let shipID = 1;
+    let shipLength = 1;
     const ships = [];
-    for (let i = 0; i < 10; i++) {
-      const shipLength = Math.floor(Math.random() * 5) + 1;
+    for (let i = 0; i < 8; i++) {
+      if (shipLength === 6) shipLength = 2;
       const shipAlignment = this.getAlignment();
       const shipPosition = this.generatePosition(shipAlignment, shipLength);
       const ship = new Ship(shipID, shipLength, shipAlignment, shipPosition);
       ships.push(ship);
       shipID++;
+      shipLength++;
     }
     return ships;
   }
@@ -54,6 +56,7 @@ export class Gameboard {
         randomIndex2++;
       }
 
+      //TODO Prevent Ships from placing next to each other !
       const isPositionTaken = this.checkPosition(coords);
       const isOffTheBoard = this.checkLimit(position, coords);
       if (isPositionTaken || isOffTheBoard) {
@@ -69,6 +72,7 @@ export class Gameboard {
 
     position.forEach((coords) => {
       this.occupiedLocations.push(coords);
+      this.occupyAdjacentCells(coords);
     });
     return position;
   }
@@ -98,6 +102,18 @@ export class Gameboard {
     return case1 || case2;
   }
 
+  //Prevent ships from being added adjacently
+  occupyAdjacentCells(coords) {
+    const offsetRight = [coords[0] + 1, coords[1]];
+    const offsetDown = [coords[0], coords[1] + 1];
+    const offsetLeft = [coords[0] - 1, coords[1]];
+    const offsetUp = [coords[0], coords[1] - 1];
+    this.occupiedLocations.push(offsetRight);
+    this.occupiedLocations.push(offsetDown);
+    this.occupiedLocations.push(offsetLeft);
+    this.occupiedLocations.push(offsetUp);
+  }
+
   placeShips() {
     this.ships.forEach((ship) => {
       ship.position.forEach((coords) => {
@@ -112,12 +128,13 @@ export class Gameboard {
     const attackedTile = this.board[x][y];
     const ship = attackedTile - 1;
 
-    if (attackedTile >= 1) {
+    if (attackedTile !== 0) {
       this.ships[ship].hit();
-      this.updateBoard(x, y, 'H');
-    } else {
-      this.updateBoard(x, y, 'M');
+      this.updateBoard(x, y, -2);
+    } else if (attackedTile === 0) {
+      this.updateBoard(x, y, -1);
     }
+    return attackedTile;
   }
 
   updateBoard(x, y, value) {
@@ -125,6 +142,6 @@ export class Gameboard {
   }
 
   checkShipsStatus() {
-    this.ships.every((ship) => ship.status === 'sunk');
+    return this.ships.every((ship) => ship.status === 'sunk');
   }
 }
