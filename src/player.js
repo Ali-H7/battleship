@@ -11,6 +11,6 @@ export class Player {
   updatePlayedMoves(x, y) {
     const playedMove = [x, y];
     this.playedMoves.push(playedMove);
-    this.lastMove = [playedMove];
+    this.lastMove = playedMove;
   }
 }
