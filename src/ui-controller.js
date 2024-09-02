@@ -1,57 +1,78 @@
 import { AIplay } from './AI';
 
 export function render(player, computer) {
-  generateGrid(player);
+  generateGrid(player, computer);
   generateGrid(computer, player);
 }
 
 function generateGrid(player1, player2) {
+  const playerContainer = getContainer(player1);
   const playerBoard = player1.board.board;
-  const playerContainer = document.querySelector(`.${player1.type}-board`);
-  playerContainer.textContent = '';
-  playerBoard.forEach((arr, i) => {
-    arr.forEach((cell, j) => {
-      const grid = document.createElement('div');
-      grid.setAttribute('data-x', i);
-      grid.setAttribute('data-y', j);
-      grid.setAttribute('data-info', cell);
-      addStyling(grid, player1.type);
-      if (player1.type === 'computer')
-        addEventListeners(grid, player1, player2);
-      playerContainer.appendChild(grid);
+
+  playerBoard.forEach((arr, x) => {
+    arr.forEach((cell, y) => {
+      const element = document.createElement('div');
+      setAttributes(x, y, cell, element);
+      addStyling(element, player1);
+
+      if (player1.type === 'computer' && player2.turn) {
+        addEventListeners(element, player1, player2);
+      }
+
+      playerContainer.appendChild(element);
     });
   });
 }
 
-function addStyling(grid, player) {
-  const gridInfo = Number(grid.getAttribute('data-info'));
-  grid.style.border = '0.1px solid grey';
-  grid.style.minWidth = '55px';
-  grid.style.minHeight = '55px';
-
-  if (gridInfo >= 1 && player !== 'computer') {
-    grid.style.backgroundColor = 'lightblue';
-  }
-
-  if (player === 'computer') {
-    grid.style.cursor = 'pointer';
-  }
-
-  if (gridInfo === -1) grid.style.backgroundColor = 'orange';
-  if (gridInfo === -2) grid.style.backgroundColor = 'red';
+function setAttributes(x, y, cell, element) {
+  element.setAttribute('data-x', x);
+  element.setAttribute('data-y', y);
+  element.setAttribute('data-info', cell);
 }
 
-function addEventListeners(grid, computer, player) {
-  const gridInfo = Number(grid.getAttribute('data-info'));
-  if (gridInfo >= 0) {
-    grid.addEventListener('click', () => {
-      const x = Number(grid.getAttribute('data-x'));
-      const y = Number(grid.getAttribute('data-y'));
+function getContainer(player) {
+  const playerContainer = document.querySelector(`.${player.type}-board`);
+  playerContainer.textContent = '';
+  return playerContainer;
+}
+
+function addStyling(cell, player) {
+  const gridInfo = Number(cell.getAttribute('data-info'));
+  cell.style.border = '0.1px solid grey';
+  cell.style.minWidth = '40px';
+  cell.style.minHeight = '40px';
+
+  if (gridInfo >= 1 && player.type !== 'computer') {
+    cell.style.backgroundColor = 'lightblue';
+  }
+
+  if (gridInfo >= 0 && player.type === 'computer') {
+    cell.style.cursor = 'pointer';
+  }
+
+  if (gridInfo === -1) cell.style.backgroundColor = 'orange';
+  if (gridInfo === -2) cell.style.backgroundColor = 'red';
+}
+
+function addEventListeners(cell, computer, player) {
+  const cellInfo = Number(cell.getAttribute('data-info'));
+  if (cellInfo >= 0) {
+    cell.addEventListener('click', () => {
+      const x = Number(cell.getAttribute('data-x'));
+      const y = Number(cell.getAttribute('data-y'));
       const attack = computer.board.receiveAttack(x, y);
-      render(player, computer);
       const checkStatus = computer.board.checkShipsStatus();
       if (checkStatus) console.log('Game Over');
-      if (attack === 0) AIplay(computer, player);
+      if (attack === 0) {
+        player.setTurn();
+        computer.setTurn();
+        AIplay(computer, player);
+      }
+      render(player, computer);
     });
   }
+}
+
+export function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }

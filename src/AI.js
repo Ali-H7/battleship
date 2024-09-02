@@ -1,23 +1,23 @@
 import { render } from './ui-controller';
+import { sleep } from './ui-controller';
 
 export async function AIplay(computer, player) {
-  while (true) {
+  while (computer.turn) {
+    await sleep(1000);
     const [lastX, lastY] = computer.lastMove;
     const [x, y] = generateComputerMoves(lastX, lastY);
     if (checkMove(x, y, computer)) continue;
     const attack = player.board.receiveAttack(x, y);
     computer.updatePlayedMoves(x, y);
-    await sleep(1000);
-    render(player, computer);
-    if (attack === 0) {
-      computer.lastMove = [];
-      break;
-    }
-  }
-}
 
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+    if (attack === 0) {
+      computer.resetLastMove();
+      computer.setTurn();
+      player.setTurn();
+    }
+
+    render(player, computer);
+  }
 }
 
 // checks if the computer played this move previously
@@ -36,7 +36,7 @@ function generateComputerMoves(lastX, lastY) {
       [0, -1],
     ];
 
-    while (true) {
+    for (let i = 0; i < 12; i++) {
       const randomNum = Math.floor(Math.random() * 3);
       const x = lastX + offsets[randomNum][0];
       const y = lastY + offsets[randomNum][1];

@@ -2,6 +2,7 @@ import './style.css';
 import { Player } from './player';
 import { render } from './ui-controller';
 
-const player1 = new Player('player');
-const player2 = new Player('computer');
-render(player1, player2);
+const player = new Player('player');
+const computer = new Player('computer');
+render(player, computer);
+console.log(player.board);
