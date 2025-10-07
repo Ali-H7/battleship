@@ -1,6 +1,6 @@
 import Gameboard from "./gameboard";
 
-const gameboard = new Gameboard
+const gameboard = new Gameboard();
 
 test('create an object 10x10 board', () => {
     expect(gameboard.board).toHaveLength(10);
