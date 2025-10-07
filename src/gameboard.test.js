@@ -8,4 +8,3 @@ test('create an object 10x10 board', () => {
         expect(gameboard.board[i]).toHaveLength(10);
     }
 });
-
