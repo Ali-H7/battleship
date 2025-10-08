@@ -1,8 +1,3 @@
-// implement bounds
-// attack
-// control game flow
-
-
 import Ship from "./ship";
 export default class Gameboard {
     constructor() {
@@ -117,6 +112,10 @@ export default class Gameboard {
         const attackedTile = this.board[x][y];
         if (attackedTile === 0) this.board[x][y] = -1
         else ship.hit();
+    }
+
+    checkIfAllShipsSunk() {
+        return this.ships.every((ship) => ship.sunk === true);
     }
 
 }
