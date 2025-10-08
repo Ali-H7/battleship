@@ -1,3 +1,8 @@
+// implement bounds
+// attack
+// control game flow
+
+
 import Ship from "./ship";
 export default class Gameboard {
     constructor() {
@@ -14,8 +19,8 @@ export default class Gameboard {
         return board;
     }
 
-    #updateBoard(shipID, coords) {
-        this.board[coords[0]][coords[1]] = shipID;
+    #updateBoard(shipID, x, y) {
+        this.board[x][y] = shipID;
     }
 
     #createShips() {
@@ -42,7 +47,11 @@ export default class Gameboard {
             }
             const placement = this.#pickPlacement(placements);
             const shipID = ship.id;
-            placement.forEach((coords) => this.#updateBoard(shipID, coords))
+            placement.forEach((coords) => {
+                const x = coords[0]
+                const y = coords[1]
+                this.#updateBoard(shipID, x, y)
+            })
         })
     }
 
@@ -103,5 +112,11 @@ export default class Gameboard {
         if (placements.length === 0) return false;
         return placements
     };
+
+    receiveAttack(x, y, ship) {
+        const attackedTile = this.board[x][y];
+        if (attackedTile === 0) this.board[x][y] = -1
+        else ship.hit();
+    }
 
 }

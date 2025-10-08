@@ -8,6 +8,7 @@ export default class Ship {
 
     hit() {
         this.health--;
+        this.isSunk();
     }
 
     isSunk() {
