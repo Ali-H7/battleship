@@ -8,22 +8,22 @@ export default class Gameboard {
 
     #generateGameBoard(size) {
         const board = [];
-        for (i = 0; i < size; i++) {
+        for (let i = 0; i < size; i++) {
             board.push(new Array(size).fill(0));
         }
         return board;
     }
 
-    #updateBoard(shipID, x, y) {
-        this.board[x][y] = shipID;
+    #updateBoard(id, x, y) {
+        this.board[x][y] = id;
     }
 
     #createShips() {
         const ships = [];
         let shipLength = 2;
-        for (i = 0; i < 5; i++) {
+        for (let i = 1; i < 6; i++) {
             const ship = new Ship(i, shipLength)
-            if (i !== 1) shipLength++
+            if (i !== 2) shipLength++
             ships.push(ship)
         }
         return ships;
@@ -43,13 +43,21 @@ export default class Gameboard {
             const placement = this.#pickPlacement(placements);
             const shipID = ship.id;
             placement.forEach((coords) => {
-                const x = coords[0]
-                const y = coords[1]
-                this.#updateBoard(shipID, x, y)
+                const x = coords[0];
+                const y = coords[1];
+                // const adjacentCells = this.#getAdjacentCells(x, y);
+                // this.#handleAdjacentCells(adjacentCells)
+                this.#updateBoard(shipID, x, y);
             })
         })
     }
-
+    // #handleAdjacentCells(adjacentCells) {
+    //     adjacentCells.forEach((cell) => {
+    //         const x = cell[0]
+    //         const y = cell[1]
+    //         if (this.#checkIfNotOccupied(x, y)) this.#updateBoard(-3, x, y);
+    //     })
+    // }
     #getRandomCoordinates() {
         let coordsFound = false;
         let x;
@@ -65,8 +73,8 @@ export default class Gameboard {
     #getPlacements(x, y, shipLength) {
         const possiblePlacements = [[[x, y]], [[x, y]], [[x, y]], [[x, y]]];
         outerloop:
-        for (i = 0; i < 4; i++) {
-            for (j = 0; j < shipLength - 1; j++) {
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < shipLength - 1; j++) {
                 x = possiblePlacements[i][j][0];
                 y = possiblePlacements[i][j][1];
                 if (i === 0) x++;
@@ -108,11 +116,30 @@ export default class Gameboard {
         return placements
     };
 
-    receiveAttack(x, y, ship) {
+    receiveAttack(x, y, attackedPlayer, turn) {
         const attackedTile = this.board[x][y];
-        if (attackedTile === 0) this.board[x][y] = -1
-        else ship.hit();
+        if (attackedTile === 0) {
+            this.board[x][y] = -1
+            turn();
+        } else if (attackedTile > 0) {
+            const ships = attackedPlayer.gameboard.ships
+            const shipID = attackedTile - 1
+            const ship = ships[shipID];
+            ship.hit();
+            this.board[x][y] = -2
+        }
+        console.log(turn)
     }
+
+    // #getAdjacentCells(x, y) {
+    //     const adjacentCells = [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]];
+    //     for (let i = adjacentCells.length - 1; i >= 0; i--) {
+    //         const x = adjacentCells[i][0]
+    //         const y = adjacentCells[i][1]
+    //         if (x < 0 || y < 0 || x > 9 || y > 9) adjacentCells.splice(i, 1);
+    //     }
+    //     return adjacentCells;
+    // }
 
     checkIfAllShipsSunk() {
         return this.ships.every((ship) => ship.sunk === true);
