@@ -2,7 +2,12 @@ import Ai from "./ai";
 export default class Dom {
 
     static currentTurn = this.#initializeTurn();
-
+    static initializeGame(firstPlayer, secondPlayer) {
+        if (this.currentTurn === -1) {
+            Ai.play(firstPlayer, secondPlayer, this.#getCurrentTurn.bind(this), this.#updateTurn.bind(this), this.handleUI.bind(this));
+        }
+        this.handleUI(firstPlayer, secondPlayer)
+    }
     static handleUI(firstPlayer, secondPlayer) {
         this.#clearUI()
         this.#generateBoards(firstPlayer, secondPlayer)
@@ -31,10 +36,13 @@ export default class Dom {
             } else {
                 playerBoard = secondPlayer.gameboard.board
                 boardElement = document.querySelector('.second-player');
-                label.textContent = 'Attack your opponent!'
+                label.textContent = 'Computer\'s turn'
                 label.classList.add('player-label')
                 console.log('dom', this.currentTurn);
-                if (this.currentTurn === 1) label.classList.add('attack-label')
+                if (this.currentTurn === 1) {
+                    label.textContent = 'Attack your opponent!'
+                    label.classList.add('attack-label')
+                }
             }
             boardElement.appendChild(label);
             playerBoard.forEach((row, x) => {
