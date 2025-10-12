@@ -116,11 +116,11 @@ export default class Gameboard {
         return placements
     };
 
-    receiveAttack(x, y, attackedPlayer, turn) {
+    receiveAttack(x, y, attackedPlayer, turnCb) {
         const attackedTile = this.board[x][y];
         if (attackedTile === 0) {
             this.board[x][y] = -1
-            turn();
+            turnCb();
         } else if (attackedTile > 0) {
             const ships = attackedPlayer.gameboard.ships
             const shipID = attackedTile - 1
@@ -128,7 +128,6 @@ export default class Gameboard {
             ship.hit();
             this.board[x][y] = -2
         }
-        console.log(turn)
     }
 
     // #getAdjacentCells(x, y) {

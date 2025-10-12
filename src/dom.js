@@ -1,18 +1,14 @@
+import Ai from "./ai";
 export default class Dom {
 
-    constructor(firstPlayer, secondPlayer) {
-        this.firstPlayer = firstPlayer
-        this.secondPlayer = secondPlayer
-        this.currentTurn = this.#initializeTurn();
-        this.#handleUI(this.firstPlayer, this.secondPlayer);
-    }
+    static currentTurn = this.#initializeTurn();
 
-    #handleUI(firstPlayer, secondPlayer) {
+    static handleUI(firstPlayer, secondPlayer) {
         this.#clearUI()
         this.#generateBoards(firstPlayer, secondPlayer)
     }
 
-    #clearUI() {
+    static #clearUI() {
         const boardElement1 = document.querySelector('.first-player');
         const boardElement2 = document.querySelector('.second-player');
 
@@ -22,7 +18,7 @@ export default class Dom {
         }
     }
 
-    #generateBoards(firstPlayer, secondPlayer) {
+    static #generateBoards(firstPlayer, secondPlayer) {
         for (let i = 0; i < 2; i++) {
             let boardElement;
             const label = document.createElement('div');
@@ -37,7 +33,8 @@ export default class Dom {
                 boardElement = document.querySelector('.second-player');
                 label.textContent = 'Attack your opponent!'
                 label.classList.add('player-label')
-                if (this.currentTurn === -1) label.classList.add('attack-label')
+                console.log('dom', this.currentTurn);
+                if (this.currentTurn === 1) label.classList.add('attack-label')
             }
             boardElement.appendChild(label);
             playerBoard.forEach((row, x) => {
@@ -46,8 +43,8 @@ export default class Dom {
                     square.classList.add('square')
                     if (i === 0 && cell > 0) this.#addColor(cell, square);
                     if (cell < 0) this.#addColor(cell, square);
-                    if (i === 1 && cell >= 0 && this.currentTurn === -1) {
-                        this.#addEvent(secondPlayer, x, y, square);
+                    if (i === 1 && cell >= 0 && this.currentTurn === 1) {
+                        this.#addEvent(x, y, square, firstPlayer, secondPlayer);
                         square.classList.add('highlight')
 
                     }
@@ -57,22 +54,30 @@ export default class Dom {
         }
     }
 
-    #addColor(cell, element) {
+    static #addColor(cell, element) {
         element.classList.add(`color-${cell}`)
     }
 
-    #addEvent(attackedPlayer, x, y, element) {
+    static #addEvent(x, y, element, firstPlayer, secondPlayer) {
         element.addEventListener('click', () => {
-            attackedPlayer.gameboard.receiveAttack(x, y, attackedPlayer, this.#updateTurn.bind(this));
-            this.#handleUI(this.firstPlayer, this.secondPlayer);
+            secondPlayer.gameboard.receiveAttack(x, y, secondPlayer, this.#updateTurn.bind(this));
+            this.handleUI(firstPlayer, secondPlayer);
+            if (this.currentTurn === -1) {
+                Ai.play(firstPlayer, secondPlayer, this.#getCurrentTurn.bind(this), this.#updateTurn.bind(this), this.handleUI.bind(this));
+            }
         });
     }
 
-    #initializeTurn() {
+    static #initializeTurn() {
         return Math.random() < 0.5 ? 1 : -1;
     };
 
-    #updateTurn() {
+    static #updateTurn() {
         this.currentTurn = -this.currentTurn
     }
+
+    static #getCurrentTurn() {
+        return this.currentTurn;
+    };
+
 }
