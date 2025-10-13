@@ -1,1 +1,1 @@
-# battleship-2
+# battleship

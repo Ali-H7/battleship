@@ -1,5 +1,5 @@
 {
-  "name": "battleship-2",
+  "name": "battleship",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,15 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Ali-H7/battleship-2.git"
+    "url": "git+https://github.com/Ali-H7/battleship.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Ali-H7/battleship-2/issues"
+    "url": "https://github.com/Ali-H7/battleship/issues"
   },
-  "homepage": "https://github.com/Ali-H7/battleship-2#readme",
+  "homepage": "https://github.com/Ali-H7/battleship#readme",
   "devDependencies": {
     "@babel/core": "^7.28.4",
     "@babel/preset-env": "^7.28.3",
