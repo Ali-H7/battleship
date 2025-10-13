@@ -74,7 +74,6 @@ export default class Dom {
             if (this.currentTurn === -1) {
                 Ai.play(firstPlayer, secondPlayer, this.#getCurrentTurn.bind(this), this.#updateTurn.bind(this), this.handleUI.bind(this));
             }
-            console.log(secondPlayer.gameboard.board)
         });
     }
 

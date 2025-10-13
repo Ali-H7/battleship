@@ -45,19 +45,12 @@ export default class Gameboard {
             placement.forEach((coords) => {
                 const x = coords[0];
                 const y = coords[1];
-                // const adjacentCells = this.#getAdjacentCells(x, y);
-                // this.#handleAdjacentCells(adjacentCells)
+
                 this.#updateBoard(shipID, x, y);
             })
         })
     }
-    // #handleAdjacentCells(adjacentCells) {
-    //     adjacentCells.forEach((cell) => {
-    //         const x = cell[0]
-    //         const y = cell[1]
-    //         if (this.#checkIfNotOccupied(x, y)) this.#updateBoard(-3, x, y);
-    //     })
-    // }
+
     #getRandomCoordinates() {
         let coordsFound = false;
         let x;
@@ -129,16 +122,6 @@ export default class Gameboard {
             this.board[x][y] = -2
         }
     }
-
-    // #getAdjacentCells(x, y) {
-    //     const adjacentCells = [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]];
-    //     for (let i = adjacentCells.length - 1; i >= 0; i--) {
-    //         const x = adjacentCells[i][0]
-    //         const y = adjacentCells[i][1]
-    //         if (x < 0 || y < 0 || x > 9 || y > 9) adjacentCells.splice(i, 1);
-    //     }
-    //     return adjacentCells;
-    // }
 
     checkIfAllShipsSunk() {
         return this.ships.every((ship) => ship.sunk === true);
