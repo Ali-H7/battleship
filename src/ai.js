@@ -1,3 +1,4 @@
+import Dom from "./dom";
 export default class Ai {
     static #availableMoves = this.#generateAvailableMoves();
 
@@ -35,6 +36,10 @@ export default class Ai {
             render(firstPlayer, secondPlayer);
             currentTurn = getCurrentTurn();
             attackCount++;
+            if (firstPlayer.gameboard.checkIfAllShipsSunk()) {
+                Dom.endGame();
+                return;
+            }
         }
     }
     static #generateAvailableMoves() {
@@ -48,6 +53,10 @@ export default class Ai {
             }
         }
         return availableMoves
+    }
+
+    static resetAvailableMoves() {
+        this.#availableMoves = this.#generateAvailableMoves();
     }
     static #generateCoordsForAttacking() {
         const availableMoves = this.#getavailableMoves();
@@ -87,27 +96,9 @@ export default class Ai {
         return false;
     }
 
-    //  static #generateCoordsForAttacking() {
-    //     const coords = [];
-    //     let coordsFound = false;
-    //     while (!coordsFound) {
-    //         const x = Math.floor(Math.random() * 10);
-    //         coords.push(x);
-    //         const y = Math.floor(Math.random() * 10);
-    //         coords.push(y);
-    //         const checkMove = this.#checkIfTheMovePlayedBefore(x, y);
-    //         if (!checkMove) coordsFound = true;
-    //     }
-    //     return coords;
-    // }
-
     static #checkIfTheMoveValid(x, y) {
         return this.#availableMoves.findIndex((coords) => coords[0] === x && coords[1] === y);
     }
-
-    // static #addToPlayedMoves(coords) {
-    //     this.#playedMoves.push(coords);
-    // }
 
     static #getavailableMoves() {
         return this.#availableMoves;

@@ -15,6 +15,74 @@
      background-color: #282828;
  }
 
+ /* Dialogs */
+ #welcome-screen,
+ #game-over-screen {
+     position: fixed;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     border: none;
+     border-radius: 1.6rem;
+     height: 24rem;
+     width: 50rem;
+     padding: 1.5%;
+     font-size: 2.4rem;
+     background-color: #1b1b1b;
+     color: #d4be98;
+ }
+
+ .welcome-screen-content,
+ .game-over-screen-content {
+     display: flex;
+     flex-direction: column;
+     gap: 0.8rem;
+ }
+
+ .welcome-instruction {
+     font-size: 1.6rem;
+     margin-bottom: 0.8rem;
+ }
+
+ .welcome-input {
+     height: 3.2rem;
+     outline: none;
+     padding: 1.5%;
+     font-size: 1.6rem;
+ }
+
+ .start-btn,
+ .restart-btn {
+     height: 5rem;
+     width: 100%;
+     color: #d4be98;
+     background-color: #282828;
+     border: none;
+     border-radius: 0.8rem;
+     font-size: 1.6rem;
+     margin-top: 1.6rem;
+ }
+
+ .start-btn:hover,
+ .restart-btn:hover {
+     cursor: pointer;
+     background-color: #7c6f64;
+ }
+
+ .winner {
+     font-size: 2rem;
+ }
+
+ #game-over-screen {
+     height: 20rem;
+ }
+
+ .game-over-screen-content {
+     align-items: center;
+ }
+
+ /*  */
+
  .nav-bar {
      background-color: #1b1b1b;
      color: #d4be98;
